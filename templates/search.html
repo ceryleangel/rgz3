@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Поиск рецептов</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <div class="menu">
+        <div>
+            {% if current_user.username == 'admin' %}
+                <div class="links">
+                    <a class="user_name">Вы вошли как: {{ current_user.username }}</a>
+                    <a href="{{ url_for('index') }}" class="profile_but">Главное меню</a>
+                    <a href="{{ url_for('logout') }}" class="profile_but">Выйти</a>
+                    <div class="admin">
+                        <a>Привет, админ!</a>
+                        <br>
+                        <a>Тебе доступно управление рецептами:</a>
+                        <br>
+                        <a href="{{ url_for('create_recipe') }}" class="admin_but">Создать рецепт</a>
+                        <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="admin_but">Редактировать</a>
+                        <a href="{{ url_for('delete_recipe') }}" class="admin_but">Удалить рецепт</a>
+                    </div>
+                </div>
+            {% elif current_user.is_authenticated %}
+                <div class="links">
+                    <a class="profile_but">Вы вошли как: {{ current_user.username }}</a>
+                    <a href="{{ url_for('index') }}" class="profile_but">Главное меню</a>
+                    <a href="{{ url_for('logout') }}" class="profile_but">Выйти</a>
+                </div>
+            {% else %}
+                <div class="links">
+                    <a href="{{ url_for('index') }}" class="profile_but">Главное меню</a>
+                    <a href="{{ url_for('login') }}" class="profile_but">Войти</a>
+                    <a href="{{ url_for('register') }}" class="profile_but">Регистрация</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="search">
+            <h1>Поиск рецептов</h1>
+
+            <form method="POST" action="{{ url_for('search') }}">
+                <input type="text" name="query" placeholder="Поиск рецепта или ингредиента" class="text_search">
+                <select name="mode" class="select">
+                    <option value="" disabled selected>Ингредиенты:</option>
+                    <option value="all">Все указанные</option>
+                    <option value="any">Любой из указанных</option>
+                </select>
+                <button type="submit" class="button">Искать</button>
+            </form>
+
+            {% if recipes %}
+                <ul>
+                    {% for recipe in recipes %}
+                        <li>
+                            <p><img src="{{ recipe.photo_url }}" alt="{{ recipe.title }}" width="200"></p>
+                            <h2>{{ recipe.title }}</h2>
+                            <p><strong>Ингредиенты:</strong> {{ recipe.ingredients }}</p>
+                            <p><strong>Шаги приготовления:</strong> {{ recipe.steps|truncate(100, True, '...') }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+               <p>Рецепты не найдены</p>
+            {% endif %}
+        </div>
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('search', page=page-1) }}" class="link_left_s">Предыдущая страница</a>
+            {% endif %}
+        
+            {% if (page * per_page) < total_recipes %}
+                <a href="{{ url_for('search', page=page+1) }}" class="link_right_s">Следующая страница</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

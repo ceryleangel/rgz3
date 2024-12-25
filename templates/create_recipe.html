@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавить новый рецепт</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <div class="cre_back">
+        <h1>Добавить новый рецепт</h1>
+        <form method="POST" action="{{ url_for('create_recipe') }}">
+            <input type="text" name="photo_url" placeholder="Ссылка на фотографию"><br>
+            <input type="text" name="title" placeholder="Название рецепта"><br>
+            <textarea name="ingredients" placeholder="Ингредиенты (перечислить через запятую)"></textarea><br>
+            <textarea name="steps" placeholder="Шаги приготовления"></textarea><br>
+            <button type="submit">Добавить</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="select">На главную</a>
+    </div>
+</body>
+</html>

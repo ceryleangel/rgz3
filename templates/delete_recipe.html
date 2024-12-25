@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Удалить рецепт</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <div class="cre_back">
+        <h1>Удалить рецепт</h1>
+        <p>Вы уверены, что хотите удалить рецепт?</p>
+        <form method="POST" action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}">
+            <input type="text" name="id" placeholder="ID рецепта"><br>
+            <button type="submit">Удалить</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="select">Отмена</a>
+
+        {% if recipes %}
+            <ul>
+                {% for recipe in recipes %}
+                    <li>
+                        <strong>ID:</strong> {{ recipe.id }}<br>
+                        <strong>Фото:</strong> <img src="{{ recipe.photo_url }}" alt="Фото рецепта" style="max-width: 100px;"><br>
+                        <strong>Название:</strong> {{ recipe.title }}<br>
+                        <strong>Ингредиенты:</strong> {{ recipe.ingredients }}<br>
+                        <strong>Шаги:</strong> {{ recipe.steps }}<br>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Рецепты не найдены</p>
+        {% endif %}
+    </div>
+</body>
+</html>

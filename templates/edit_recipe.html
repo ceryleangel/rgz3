@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать рецепт</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <div class="cre_back">
+        <h1>Редактировать рецепт</h1>
+        <form method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe.id) }}">
+            <input type="text" name="id" placeholder="ID рецепта" value="{{ recipe.id }}"><br>
+            <input type="text" name="photo_url" placeholder="Ссылка на фотографию" value="{{ recipe.photo_url }}"><br>
+            <input type="text" name="title" placeholder="Название рецепта" value="{{ recipe.title }}"><br>
+            <textarea name="ingredients" placeholder="Ингредиенты (перечислить через запятую)">{{ recipe.ingredients }}</textarea><br>
+            <textarea name="steps" placeholder="Шаги приготовления">{{ recipe.steps }}</textarea><br>
+            <button type="submit">Сохранить</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="select">На главную</a>
+        
+        {% if list_recipes %}
+            <ul>
+                {% for recipe in list_recipes %}
+                    <li>
+                        <strong>ID:</strong> {{ recipe.id }}<br>
+                        <strong>Фото:</strong> <img src="{{ recipe.photo_url }}" alt="Фото рецепта" style="max-width: 100px;"><br>
+                        <strong>Название:</strong> {{ recipe.title }}<br>
+                        <strong>Ингредиенты:</strong> {{ recipe.ingredients }}<br>
+                        <strong>Шаги:</strong> {{ recipe.steps }}<br>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Рецепты не найдены</p>
+        {% endif %}
+    </div>
+</body>
+</html>

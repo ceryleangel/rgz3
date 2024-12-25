@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <div class="reg_back">
+        <form method="POST" action="{{ url_for('register') }}">
+            <h1>Регистрация пользователя</h1>
+
+            <input class="text_log" type="text" name="username" placeholder="Логин">
+            <br>
+            <input class="text_pas" type="password" name="password" placeholder="Пароль">
+            <br>
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+
+        <div class="error-messages">
+            {% if errors %}
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('index') }}" class="select">На главную</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная страница</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <div class="menu">
+        <div class="links">
+            {% if current_user.is_authenticated %}
+            <div class="links">
+                <a class="profile_but">Вы вошли как: {{ current_user.username }}</a>
+                <a class="profile_but" href="{{ url_for('search') }}">Перейти к поиску рецептов</a>
+                {% if current_user.is_admin %}
+                    <a class="profile_but" href="{{ url_for('create_recipe') }}">Добавить рецепт</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="profile_but">Выйти</a>
+            </div>
+            {% else %}
+            <div class="links">
+                <a href="{{ url_for('search') }}" class="profile_but">Перейти к поиску рецептов</a>
+                <a href="{{ url_for('login') }}" class="profile_but">Войти</a>
+                <a href="{{ url_for('register') }}" class="profile_but">Регистрация</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="glav_str"><h1>Главная страница</h1></div>
+        <div class="main_page">
+            {% if recipes %}
+                <ul>
+                    {% for recipe in recipes %}
+                        <li>
+                            <p><img src="{{ recipe.photo_url }}" alt="{{ recipe.title }}" width="200"></p>
+                            <h2>{{ recipe.title }}</h2>
+                            <p><strong>Ингредиенты:</strong> {{ recipe.ingredients }}</p>
+                            <p><strong>Шаги приготовления:</strong> {{ recipe.steps|truncate(100, True, '...') }}</p>
+                            {% if current_user.is_admin %}
+                                <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="admin_but">Редактировать</a>
+                                <!-- Форма для удаления рецепта -->
+                                <form method="POST" action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}" style="display:inline;">
+                                    <button type="submit" class="admin_but">Удалить</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+               <p>Рецепты не найдены</p>
+            {% endif %}
+        </div>
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('index', page=page-1) }}" class="link_left_v">Предыдущая страница</a>
+            {% endif %}
+        
+            {% if (page * per_page) < total_recipes %}
+                <a href="{{ url_for('index', page=page+1) }}" class="link_right_v">Следующая страница</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
